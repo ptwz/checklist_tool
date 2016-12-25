@@ -1,85 +1,49 @@
 
-function wordClass(word, path){
-	this.ready = false;
-	this.speaking = false;
+checklist = {
+	struct:null,
+	step:0,
+	current:null,
+	update_gui:function(){
+		},
+	init:function(checklist_structure){
+		checklist.struct = checklist_structure;
+		},
+	get_all:function(){
+		// Returns a list of available checklists
+		return(Object.keys(checklist.struct.checklists));
+		},
+	set_current:function(name){
+		if (name in checklist.struct.checklists)
+		{
+			checklist.current=checklist.struct.checklists[name];
+			checklist.current_name=name;
+			checklist.step = 0;
+			text2speech.say(checklist.current_name+" checklist begin")
+			checklist.begin_step();
+		} else
+			alert("Invalid checklist chosen!!");
+		},
+	begin_step:function(){
+		checklist.check_text = checklist.current.steps[checklist.step];
 
-	this.speak = function(when_done){ 
-		this.when_done = when_done || function(){}; 
-		this.speaking = true;
-		this.player.play();
-		};
-
-	// Make player object
-	var filename =  path + "/" + word.toLowerCase() + ".mp3";
-	this.player = new Audio();
-
-	var me = this;
-	$(this.player).attr("src", filename);
-	$(this.player).attr("preload", "auto");
-	$(this.player).on("canplay", function(){ me.ready=true })
-	// TBD	     .on("error", text2speech.handle_error)
-		     .on("ended", function(){ me.speaking=false; me.when_done(); console.log(me) ;}  );
-}
-
-text2speech = {
-	queue:[],
-	player:null,
-	words:{},
-	spelling:{ '0':'zero', '1':'one', '2':'two', '3':'tree', '4':'fower', '5':'five',
-	           '6':'six', '7':'seven', '8':'eight', '9':'niner',
-		   'a':'alpha', 'b':'bravo', 'c':'charlie', 'd':'delta', 'e':'echo',
-		   'f':'foxtrott', 'g':'golf', 'h':'hotel', 'i':'india', 'j':'juliett',
-		   'k':'kilo', 'l':'lima', 'm':'mike', 'n':'november', 'o':'oscar',
-		   'p':'papa', 'q':'quebec', 'r':'romeo', 's':'sierra', 't':'tango',
-		   'u':'uniform', 'v':'victor', 'w':'whiskey', 'x':'x-ray', 'y':'yankee',
-		   'z':'zulu'},
-	playing:false,
-	init:function(words,path){
-		var words = words.toLowerCase().split(" ");
-		for (var i in words){
-			var word = words[i];
-			text2speech.words[word] = new wordClass(word, path);
+		text2speech.say(checklist.check_text);
+		checklist.update_gui();
+		},
+	finish_step:function(){
+		if (checklist.current == null) 
+			return;
+		var max_step = checklist.current.steps.length;
+		checklist.step += 1;
+		if (checklist.step == max_step) {
+			checklist.complete();
+			return;
 			}
+		checklist.begin_step();
 		},
-	play_next:function(){
-		console.log("hier");
-		if (text2speech.queue.length==0){
-			text2speech.player_finished();
-			}
-		var word = text2speech.queue.shift();
-		console.log(word);
-		word.speak(text2speech.play_next);
-		},
-	handle_error:function(evt){
-		},
-	player_finished:function(){
-		text2speech.playing=false;
-		},
-	say:function(text){
-		var i;
-		var pieces = text.toLowerCase().split(/[, ]/);
-		for (var i = 0; i<pieces.length; i++){
-			var word = pieces[i];
-			if (word in text2speech.words)
-				text2speech.queue.push(text2speech.words[word]);
-			else if (word.match(/^[0-9]+$/)){
-				var numbers = word.split("");
-				for (var i in numbers){
-					text2speech.queue.push(text2speech.words[text2speech.spelling[numbers[i]]]);
-					}
-				}
-		}
-		if (text2speech.queue.length>0){
-			text2speech.play_next();
+	complete:function(){
+		text2speech.say(checklist.current_name+" checklist complete");
+		checklist.current = null;
+		checklist.step = 0;
+		checklist.update_gui();
 		}
 	}
-}
-
-function test(){
- text2speech.say("alpha bravo charlie");
-}
-
-$(document).ready(function(){
- $("#btn-test").on("click", test);
- text2speech.init("belts fastened brake set altimeter qnh shut-off valve ignition choke on off fuel pump prop area starter oil pressure normal radio trim cowl flap cht doors flaps open close throttle idle full one two tree fower five six seven eight niner ten hundred tousand decial alpha bravo charlie delta echo foxtrott golf hotel india juliett kilo lima mike november oscar papa quebec romeo sierra tango uniform victor whiskey x-ray yankee zulu magnet left right main switch fuses fuse rescue-system arm disarm fastened avionics rudder aileron elevator rpm taxi holding-point departure take-off landing post pre", "snd");
-});

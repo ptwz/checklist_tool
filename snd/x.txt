@@ -87,3 +87,37 @@ take-off
 landing
 post
 pre
+plane
+type
+FK-9 MK3
+id
+D-MCSD
+checklists
+Before Startup
+next
+Startup
+steps
+seat adjusted
+belts fastened
+shut-off valve open
+avionics off
+fuses checked
+rescue system arm
+Startup
+next
+taxi
+steps
+brake set
+doors closed
+main switch on
+fuel pump on
+ignition on
+prop area free
+choke if needed
+starter pressed
+oil pressue min 
+startup
+checklist
+complete
+start
+begin
