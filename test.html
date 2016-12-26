@@ -1,6 +1,7 @@
 <html>
 <head>
 <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+<link rel="stylesheet" href="css/checklist.css" />
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 <script src="js/checklist.js"></script>
@@ -8,16 +9,26 @@
 <script src="js/gui.js"></script>
 </head>
 <body>
- <button class="ui-btn" id="btn-test">Test</button>
- <button class="ui-btn" id="btn-checked">Check!</button>
- <div data-role="header" data-position="fixed">
+ <div data-role="page" id="workbook">
+  <!-- Main "workspace" -->
+  <div id="div-checklist-container">
+  <ul data-role="listview" id="lst-checklist">
+    <li><a href="acura.html">Acura</a></li>
+      <li><a href="audi.html">Audi</a></li>
+        <li><a href="bmw.html">BMW</a></li>
+	</ul>
+  </div>
+  <button class="ui-btn" id="btn-checked">Check!</button>
+  <!-- Misc stuff -->
+  <div data-role="header" data-position="fixed">
    <h1 id="titlebar">Titlebar</h1>
     <button id="btn-back" class="ui-btn" data-inline="true" data-icon="ui-icon-arrow-l">
      <span class="ui-icon ui-icon-arrow-l ui-icon-shadow"></span>
      Hallo
     </button>
+  </div>
+  <div id="div-footer" data-role="footer" data-position="fixed">
  </div>
- <div id="div-footer" data-role="footer" data-position="fixed">
 <!--   <h1 id="footer_text">Fixed Footer</h1> -->
  </div>
  <script>
@@ -30,28 +41,29 @@ x={
     "Before Startup": {
       "next": ["Startup"],
       "steps": [
-        "seat adjusted",
-        "belts fastened",
-        "shut-off valve open",
-        "avionics off",
-        "fuses checked",
-        "rescue system arm"
+        "seat ; adjusted",
+        "belts ; fastened",
+        "shut-off valve ; open",
+        "avionics ; off",
+        "fuses ; checked",
+        "rescue-system ; arm"
       ]
     },
     "Startup": {
       "next": [
-        "taxi"
+        "Taxi"
       ],
       "steps": [
-        "brake set",
-        "doors closed",
-        "main switch on",
-        "fuel pump on",
-        "ignition on",
-        "prop area free",
-        "choke if needed",
-        "starter pressed",
-        "oil pressure min "
+        "brake ; set",
+	"throttle ; idle",
+        "doors ; closed",
+        "main switch ; on",
+        "fuel pump ; on",
+        "ignition ; on",
+        "prop area ; free",
+        "choke ; if needed",
+        "starter ; pressed",
+        "oil pressure ; min "
       ]
     }
   }
@@ -61,7 +73,6 @@ x={
 	gui.init(checklist);
 	
 
-	$("#btn-test").on("click", test);
 	$("#btn-checked").on("click", function(){checklist.finish_step()} );
   });
  </script>

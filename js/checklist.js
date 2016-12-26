@@ -4,6 +4,9 @@ checklist = {
 	step:0,
 	current:null,
 	current_name:'',
+	check_text:'',
+	check_what:'',
+	check_how:'',
 	next:[],
 	update_gui:function(){
 		},
@@ -15,6 +18,10 @@ checklist = {
 	get_all:function(){
 		// Returns a list of available checklists
 		return(Object.keys(checklist.struct.checklists));
+		},
+	get_current_list:function(){
+		if (checklist.current == null) return([]);
+		return checklist.current.steps;
 		},
 	set_current:function(name){
 		if (name in checklist.struct.checklists)
@@ -30,13 +37,19 @@ checklist = {
 
 			checklist.current_name=name;
 			checklist.step = 0;
-			text2speech.say(checklist.current_name+" checklist begin")
+			text2speech.say(checklist.current_name+" checklist begin .")
 			checklist.begin_step();
 		} else
 			alert("Invalid checklist chosen ('"+name+"')!");
 		},
 	begin_step:function(){
 		checklist.check_text = checklist.current.steps[checklist.step];
+		var parts = checklist.check_text.split(";")
+		checklist.check_what = parts[0].trim();
+		if (parts.length>1)
+			check_how = parts[1].trim();
+		else
+			check_how = "";
 
 		text2speech.say(checklist.check_text);
 		checklist.update_gui();
