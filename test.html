@@ -5,19 +5,30 @@
 <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 <script src="js/checklist.js"></script>
 <script src="js/tts.js"></script>
+<script src="js/gui.js"></script>
 </head>
 <body>
  <button class="ui-btn" id="btn-test">Test</button>
  <button class="ui-btn" id="btn-checked">Check!</button>
+ <div data-role="header" data-position="fixed">
+   <h1 id="titlebar">Titlebar</h1>
+    <button id="btn-back" class="ui-btn" data-inline="true" data-icon="ui-icon-arrow-l">
+     <span class="ui-icon ui-icon-arrow-l ui-icon-shadow"></span>
+     Hallo
+    </button>
+ </div>
+ <div id="div-footer" data-role="footer" data-position="fixed">
+<!--   <h1 id="footer_text">Fixed Footer</h1> -->
+ </div>
  <script>
 x={
   "plane": {
     "type": "FK-9 MK3",
-    "id": "D-MCSD"
+    "id": "D-MZZZ"
   },
   "checklists": {
     "Before Startup": {
-      "next": "Startup",
+      "next": ["Startup"],
       "steps": [
         "seat adjusted",
         "belts fastened",
@@ -46,11 +57,9 @@ x={
   }
 };
  $(document).ready(function(){
-	function test(){
-	 checklist.set_current("Startup");
-	}
-
  	checklist.init(x);
+	gui.init(checklist);
+	
 
 	$("#btn-test").on("click", test);
 	$("#btn-checked").on("click", function(){checklist.finish_step()} );
