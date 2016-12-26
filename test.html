@@ -8,6 +8,53 @@
 </head>
 <body>
  <button class="ui-btn" id="btn-test">Test</button>
- 
+ <button class="ui-btn" id="btn-checked">Check!</button>
+ <script>
+x={
+  "plane": {
+    "type": "FK-9 MK3",
+    "id": "D-MCSD"
+  },
+  "checklists": {
+    "Before Startup": {
+      "next": "Startup",
+      "steps": [
+        "seat adjusted",
+        "belts fastened",
+        "shut-off valve open",
+        "avionics off",
+        "fuses checked",
+        "rescue system arm"
+      ]
+    },
+    "Startup": {
+      "next": [
+        "taxi"
+      ],
+      "steps": [
+        "brake set",
+        "doors closed",
+        "main switch on",
+        "fuel pump on",
+        "ignition on",
+        "prop area free",
+        "choke if needed",
+        "starter pressed",
+        "oil pressure min "
+      ]
+    }
+  }
+};
+ $(document).ready(function(){
+	function test(){
+	 checklist.set_current("Startup");
+	}
+
+ 	checklist.init(x);
+
+	$("#btn-test").on("click", test);
+	$("#btn-checked").on("click", function(){checklist.finish_step()} );
+  });
+ </script>
 </body>
 </html>
