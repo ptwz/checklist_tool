@@ -5,7 +5,7 @@ float: left; width: 50% !important;
 */
 
 #div-checklist-container{
-  overflow: scroll;
+  overflow: auto;
   -webkit-overflow-scrolling:touch; 
   width:50% !important;
   float: left;
