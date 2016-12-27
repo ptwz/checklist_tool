@@ -21,7 +21,10 @@ checklist = {
 		},
 	get_current_list:function(){
 		if (checklist.current == null) return([]);
-		return checklist.current.steps;
+		var result = [];
+		for (var i in checklist.current.steps)
+			result.push(checklist.current.steps[i].replace(";", "..."));
+		return result;
 		},
 	set_current:function(name){
 		if (name in checklist.struct.checklists)
