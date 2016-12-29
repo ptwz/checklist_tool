@@ -8,6 +8,7 @@ checklist = {
 	check_what:'',
 	check_how:'',
 	next:[],
+	is_complete:true,
 	update_gui:function(){
 		},
 	init:function(checklist_structure){
@@ -30,6 +31,7 @@ checklist = {
 		if (name in checklist.struct.checklists)
 		{
 			checklist.current=checklist.struct.checklists[name];
+			checklist.is_complete=false;
 
 			// Kinda assertions on the format:
 			if (! ("next" in checklist.current) ){
@@ -60,6 +62,8 @@ checklist = {
 	finish_step:function(){
 		if (checklist.current == null) 
 			return;
+		if (text2speech.playing)
+			return;
 		var max_step = checklist.current.steps.length;
 		checklist.step += 1;
 		if (checklist.step == max_step) {
@@ -70,6 +74,7 @@ checklist = {
 		},
 	complete:function(){
 		text2speech.say(checklist.current_name+" checklist complete");
+		checklist.is_complete = true;
 		checklist.current = null;
 		checklist.step = 0;
 		checklist.update_gui();
