@@ -1,22 +1,32 @@
 <html>
 <head>
-<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-<link rel="stylesheet" href="http://demos.jquerymobile.com/1.4.5/theme-classic/theme-classic.css" />
+<link rel="stylesheet" href="css/jquery.mobile.custom.structure.css">
+<link rel="stylesheet" href="css/jquery.mobile.custom.theme.css">
 <link rel="stylesheet" href="css/checklist.css" />
-<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script src="js/jquery-2.1.4.min.js"></script>
+<script src="js/jquery.mobile.custom.js"></script>
 <script src="js/checklist.js"></script>
 <script src="js/tts.js"></script>
 <script src="js/gui.js"></script>
 </head>
 <body>
- <div data-role="page" id="workbook">
+ <div data-role="page" id="page-editor">
+   <ul data-role="listview" id="lst-edit-checklist">
+   </ul>
+   <div id="div-inspector">
+    <input id="input-checktext"  type="text" placeholder="Check text"></input>
+    <input id="btn-edit-ok"      type="button" class="ui-btn" data-inline="true" data-icon="ui-icon-ok"></input>
+    <input id="btn-edit-discard" type="button" class="ui-btn" data-inline="true" data-icon="ui-icon-cancel"></input>
+   </div>
+ </div>
+ <div data-role="page" id="page-workbook">
   <!-- Main "workspace" -->
   <div id="div-checklist-container">
   <ul data-role="listview" id="lst-checklist">
   </ul>
   </div>
   <button class="ui-btn" id="btn-checked">Check!</button>
+
   <!-- Misc stuff -->
   <div data-role="header" data-position="fixed">
    <h1 id="titlebar">Titlebar</h1>
@@ -69,9 +79,6 @@ x={
  $(document).ready(function(){
  	checklist.init(x);
 	gui.init(checklist);
-	
-
-	$("#btn-checked").on("click", function(){checklist.finish_step()} );
   });
  </script>
 </body>

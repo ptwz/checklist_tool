@@ -5,8 +5,11 @@ gui = {
 		gui.footer = $("#div-footer");
 		gui.btn_checked = $("#btn-checked");
 		gui.lst_checklist = $("#lst-checklist");
-		gui.workbook = $("#workbook");
+		gui.workbook = $("#page-workbook");
 		gui.div_checklist_container = $("#div-checklist-container");
+
+		gui.btn_checked.on("click", gui.on_click_checked);
+		gui.lst_checklist.listview();
 		// Hook into other stuff
 		gui.checklist = checklist;
 		checklist.update_gui = gui.update;
@@ -22,10 +25,15 @@ gui = {
 
 		var title = gui.checklist.current_name + " Checklist - " + plane_id;
 		
-		// Set text in current checklist item
-		gui.btn_checked.text(checklist.check_text.replace(";","..."));
-		gui.titlebar.text(title);
-
+		if (!gui.checklist.is_complete){
+			// Set text in current checklist item
+			gui.btn_checked.show().height(gui.div_checklist_container.height()).text(checklist.check_text.replace(";","..."));
+			gui.titlebar.text(title);
+		} else {
+			// If no checklist in progress or has finished, show
+			// next choices
+			gui.btn_checked.hide();
+		}
 		// Adjust height of workbook
 		var checklist_height = $(window).height() - gui.footer.height()*2;
 		console.log(checklist_height);
@@ -67,5 +75,10 @@ gui = {
 				});
 			btn.button("refresh");
 		}
-	}
+	},
+	on_click_checked:function(){
+		gui.checklist.finish_step();
+		},
 }
+
+
