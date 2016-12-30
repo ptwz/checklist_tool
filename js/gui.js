@@ -142,6 +142,7 @@ gui_editor = {
 				element.addClass("down");
 			gui_editor.lst_all_checklists.append(element);
 		}
+		gui_editor.lst_all_checklists.listview("refresh");
 
 		// Visualize currently selected checklist
 		gui_editor.lst_edit_checklist_items.empty();
@@ -165,5 +166,6 @@ gui_editor = {
 			.bind( "sortstop", function(event, ui) {
 			      gui_editor.lst_edit_checklist_items.listview('refresh');
 			  });
+		gui_editor.lst_edit_checklist_items.listview("refresh");
 		}
 	};
