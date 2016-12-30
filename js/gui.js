@@ -159,6 +159,11 @@ gui_editor = {
 			// TODO: Hook up editability
 			console.log(steps[i]);
 			}
-
+		gui_editor.lst_edit_checklist_items
+			.sortable()
+			.disableSelection()
+			.bind( "sortstop", function(event, ui) {
+			      gui_editor.lst_edit_checklist_items.listview('refresh');
+			  });
 		}
 	};
