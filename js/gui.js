@@ -120,6 +120,7 @@ gui_editor = {
 		},
 	 on_select_checklist:function(name){
 	 	gui_editor.current_checklist = name;
+		gui_editor.update();
 		console.log("Selected "+name);
 	 	},
 	 update:function(){
@@ -132,11 +133,13 @@ gui_editor = {
 		var checklists = gui_editor.raw_checklist.checklists;
 		for (var i in checklists){
 			var element = $('<li class="ui-btn ui-btn-icon-right"></li>');
-			console.log(i);
 			element.text(i);
 			element.on("click", {'name':i}, function(evt){
 				gui_editor.on_select_checklist(evt.data.name);
 				});
+			console.log(i+"?="+gui_editor.current_checklist);
+			if (i == gui_editor.current_checklist)
+				element.addClass("down");
 			gui_editor.lst_all_checklists.append(element);
 		}
 
@@ -145,7 +148,7 @@ gui_editor = {
 		if (gui_editor.current_checklist == null)
 			var steps = [];
 		else
-			var steps = gui_editor.raw_checklist.checklists[current_checklist];
+			var steps = gui_editor.raw_checklist.checklists[gui_editor.current_checklist].steps;
 		// TODO: Make sortable
 
 		var active = null;
