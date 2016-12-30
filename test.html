@@ -11,7 +11,16 @@
 </head>
 <body>
  <div data-role="page" id="page-editor">
-   <ul data-role="listview" id="lst-edit-checklist">
+   <div id="div-checklist-select">
+    <ul id="lst-all-checklists" data-role="listview" >
+    </ul>
+   </div>
+   <div id="div-checklist-edior">
+    <input id="input-listname"></input>
+    <ul id="lst-edit-checklist-nexts" data-role="listview" >
+    </ul>
+    <ul id="lst-edit-checklist-items" data-role="listview" >
+    </ul>
    </ul>
    <div id="div-inspector">
     <input id="input-checktext"  type="text" placeholder="Check text"></input>
@@ -78,7 +87,8 @@ x={
 };
  $(document).ready(function(){
  	checklist.init(x);
-	gui.init(checklist);
+	gui_workbook.init(checklist);
+	gui_editor.init(x);
   });
  </script>
 </body>
