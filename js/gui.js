@@ -93,6 +93,7 @@ gui_editor = {
 		},
 	current_checklist:null, // References to the current checklist to be edited, key into 
 				// gui_editor.raw_checklist.checklists object
+	edit_step:null, // Reference to the current checklists step to be edited (if any)
 	init:function(raw_checklist){
 		// Hook up UI
 		//gui_editor.titlebar = $("#titlebar");
@@ -123,6 +124,10 @@ gui_editor = {
 		gui_editor.update();
 		console.log("Selected "+name);
 	 	},
+	 _cl:function(){
+	 	// Shorthand for current checklist object
+	 	return gui_editor.raw_checklist.checklists[gui_editor.current_checklist]
+		},
 	 update:function(){
 	 	// Fix checklist viewer height
 		var checklist_height = $(window).height(); // - gui_editor.footer.height()*2;
@@ -149,22 +154,48 @@ gui_editor = {
 		if (gui_editor.current_checklist == null)
 			var steps = [];
 		else
-			var steps = gui_editor.raw_checklist.checklists[gui_editor.current_checklist].steps;
-		// TODO: Make sortable
+			var steps = gui_editor._cl().steps;
 
 		var active = null;
 		for (var i in steps){
 			var element = $('<li class="ui-btn ui-btn-icon-right"></li>');
-			element.text(steps[i]);
+			if (gui_editor.edit_step==i){
+				var inp = $('<input type="text">').attr("value", steps[i]);
+				inp.on( "focusout", {i:i}, function(evt){
+					// When leaving element, commit changes
+					gui_editor._cl().steps[evt.data.i] = inp.attr("value");
+					gui_editor.update();
+					gui_editor.edit_step = null;
+					});
+
+				window.setTimeout(1, function(){
+					inp.focus();
+				});
+				element.append(inp);
+			} else
+				element.text(steps[i]);
+			// Edit text on dblclick
+			element.on("dblclick", {i:i}, function(evt){
+				gui_editor.edit_step = evt.data.i;
+				gui_editor.update();
+				});
 			gui_editor.lst_edit_checklist_items.append(element);
-			// TODO: Hook up editability
 			console.log(steps[i]);
 			}
+
 		gui_editor.lst_edit_checklist_items
 			.sortable()
 			.disableSelection()
 			.bind( "sortstop", function(event, ui) {
-			      gui_editor.lst_edit_checklist_items.listview('refresh');
+			      var lst = gui_editor.lst_edit_checklist_items;
+			      lst.listview('refresh');
+
+			      var step_items = $("li", lst);
+			      var new_steps = [];
+			      for (var i in step_items){
+			      	new_steps.push(step_items[i].textContent);
+			      }
+			      gui_editor._cl().steps = new_steps;
 			  });
 		gui_editor.lst_edit_checklist_items.listview("refresh");
 		}
