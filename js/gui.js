@@ -94,6 +94,7 @@ gui_editor = {
 	current_checklist:null, // References to the current checklist to be edited, key into 
 				// gui_editor.raw_checklist.checklists object
 	edit_step:null, // Reference to the current checklists step to be edited (if any)
+	_inputfield:null, // Stores the input element for editing
 	init:function(raw_checklist){
 		// Hook up UI
 		//gui_editor.titlebar = $("#titlebar");
@@ -109,9 +110,7 @@ gui_editor = {
 		gui_editor.lst_all_checklists = $("#lst-all-checklists");
 		gui_editor.lst_all_checklists.listview();
 
-		//gui_editor.div_edit_checklist_container = $("#div-checklist-container");
 
-		//gui_editor.btn_checked.on("click", gui_editor.on_click_checked);
 		// Hook into other stuff
 		gui_editor.raw_checklist = raw_checklist || gui_editor.empty_checklist;
 		// Show first frame
@@ -120,10 +119,22 @@ gui_editor = {
 		//gui_editor.checklist.set_current("Startup");
 		},
 	 on_select_checklist:function(name){
+		gui_editor.end_edit();
 	 	gui_editor.current_checklist = name;
 		gui_editor.update();
 		console.log("Selected "+name);
 	 	},
+	end_edit:function(){
+		// Terminates current text editing process.
+		// NOTE: edit_step and current_checklist must be consistent!
+		var inp = gui_editor._inputfield;
+		if (gui_editor.edit_step != null){
+			gui_editor._cl().steps[gui_editor.edit_step] = inp.attr("value");
+			gui_editor.edit_step = null;
+			gui_editor._inputfield = null;
+			gui_editor.update();
+		}
+	},
 	 _cl:function(){
 	 	// Shorthand for current checklist object
 	 	return gui_editor.raw_checklist.checklists[gui_editor.current_checklist]
@@ -161,21 +172,24 @@ gui_editor = {
 			var element = $('<li class="ui-btn ui-btn-icon-right"></li>');
 			if (gui_editor.edit_step==i){
 				var inp = $('<input type="text">').attr("value", steps[i]);
-				inp.on( "focusout", {i:i}, function(evt){
-					// When leaving element, commit changes
-					gui_editor._cl().steps[evt.data.i] = inp.attr("value");
-					gui_editor.update();
-					gui_editor.edit_step = null;
+				inp.on( "focusout", gui_editor.end_edit);
+				inp.on( "keypress", function(evt){
+					if (evt.key.toLowerCase()=="enter"){
+						gui_editor.end_edit();
+					}
 					});
+				gui_editor._inputfield = inp;
 
-				window.setTimeout(1, function(){
+				window.setTimeout(function(){
 					inp.focus();
-				});
+					console.log("Focus!");
+				}, 500);
 				element.append(inp);
 			} else
 				element.text(steps[i]);
 			// Edit text on dblclick
 			element.on("dblclick", {i:i}, function(evt){
+				gui_editor.end_edit();
 				gui_editor.edit_step = evt.data.i;
 				gui_editor.update();
 				});
