@@ -24,7 +24,7 @@ gui_workbook = {
 			var plane_id = "???";
 
 		var title = gui_workbook.checklist.current_name + " Checklist - " + plane_id;
-		
+
 		if (!gui_workbook.checklist.is_complete){
 			// Set text in current checklist item
 			gui_workbook.btn_checked.show().height(gui_workbook.div_checklist_container.height()).text(checklist.check_text.replace(";","..."));
@@ -91,15 +91,25 @@ gui_editor = {
 		"checklists":{
 			}
 		},
-	current_checklist:null, // References to the current checklist to be edited, key into 
+	current_checklist:null, // References to the current checklist to be edited, key into
 				// gui_editor.raw_checklist.checklists object
 	edit_step:null, // Reference to the current checklists step to be edited (if any)
 	_inputfield:null, // Stores the input element for editing
+	open_page:function(element){
+		window.location.hash="#"+element[0].id;
+	},
 	init:function(raw_checklist){
 		// Hook up UI
 		//gui_editor.titlebar = $("#titlebar");
 		//gui_editor.footer = $("#div-footer");
-		gui_editor.editor = $("#page-editor");
+		gui_editor.editor = $("#page-editor").page();
+		gui_editor.checklist_view = $("#page-editor-checklist").page();
+		gui_editor.step_view = $("#page-editor-step-inspector").page();
+		gui_editor.footer = $('[data-role="footer"]', gui_editor.editor);
+		gui_editor.header = $('[data-role="header"]', gui_editor.editor);
+		gui_editor.titlebar = $("#div-titlebar-editor");
+
+		gui_editor.btn_back = $('[data-role="header"]', gui_editor.editor);
 
 		gui_editor.lst_edit_checklist_items = $("#lst-edit-checklist-items");
 		gui_editor.lst_edit_checklist_items.listview();
@@ -110,20 +120,31 @@ gui_editor = {
 		gui_editor.lst_all_checklists = $("#lst-all-checklists");
 		gui_editor.lst_all_checklists.listview();
 
+		gui_editor.btn_back_to_checklists = $(".btn-back", gui_editor.checklist_view);
+		gui_editor.btn_exit_editor = $(".btn-back", gui_editor.editor);
 
 		// Hook into other stuff
 		gui_editor.raw_checklist = raw_checklist || gui_editor.empty_checklist;
 		// Show first frame
 		gui_editor.update();
 
+		gui_editor.footer.empty();
+		gui_editor.btn_exit_editor.on("click", gui_editor.on_exit_btn);
+		gui_editor.btn_back_to_checklists.on("click", gui_editor.on_back_to_checklists);
+
 		//gui_editor.checklist.set_current("Startup");
+		//
 		},
-	 on_select_checklist:function(name){
+	on_select_checklist:function(name){
 		gui_editor.end_edit();
 	 	gui_editor.current_checklist = name;
 		gui_editor.update();
 		console.log("Selected "+name);
+		gui_editor.open_page(gui_editor.checklist_view);
 	 	},
+	on_select_step:function(number){
+		gui_editor.open_page(gui_editor.checklist_view);
+		},
 	end_edit:function(){
 		// Terminates current text editing process.
 		// NOTE: edit_step and current_checklist must be consistent!
@@ -139,7 +160,17 @@ gui_editor = {
 	 	// Shorthand for current checklist object
 	 	return gui_editor.raw_checklist.checklists[gui_editor.current_checklist]
 		},
-	 update:function(){
+	on_back_to_checklists:function(){
+		gui_editor.current_checklist = null;
+		gui_editor.end_edit();
+		gui_editor.open_page(gui_editor.editor);
+		},
+	on_exit_btn:function(){
+		gui_editor.current_checklist = null;
+		gui_editor.end_edit();
+		gui_editor.open_page(gui_editor.editor);
+		},
+	update:function(){
 	 	// Fix checklist viewer height
 		var checklist_height = $(window).height(); // - gui_editor.footer.height()*2;
 		gui_editor.lst_edit_checklist_items.height(checklist_height);
@@ -196,7 +227,6 @@ gui_editor = {
 			gui_editor.lst_edit_checklist_items.append(element);
 			console.log(steps[i]);
 			}
-
 		gui_editor.lst_edit_checklist_items
 			.sortable()
 			.disableSelection()
