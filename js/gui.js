@@ -236,7 +236,7 @@ gui_editor = {
 
 			      var step_items = $("li", lst);
 			      var new_steps = [];
-			      for (var i in step_items){
+			      for (var i=0; i<step_items.length; i++){
 			      	new_steps.push(step_items[i].textContent);
 			      }
 			      gui_editor._cl().steps = new_steps;
