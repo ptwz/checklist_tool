@@ -101,7 +101,7 @@ gui_editor = {
 	init:function(raw_checklist){
 		// Hook up UI
 		//gui_editor.titlebar = $("#titlebar");
-		//gui_editor.footer = $("#div-footer");
+		//gui_editor.footer = $("#div-footer
 		gui_editor.editor = $("#page-editor").page();
 		gui_editor.checklist_view = $("#page-editor-checklist").page();
 		gui_editor.inspector_view = $("#page-editor-step-inspector").page();
@@ -173,15 +173,19 @@ gui_editor = {
 		},
 	open_inspector:function(){
 		var steps = gui_editor._cl().steps;
-		gui_editor.input_inpector_checktext = steps[gui_editor.edit_step];
+		console.log("open_inspector");
+		gui_editor.input_inpector_checktext.val(steps[gui_editor.edit_step]);
 		gui_editor.open_page(gui_editor.inspector_view);
-		gui_editor.btn_inpector_ok.on("click", on_inspector_commit);
-		gui_editor.btn_inpector_discard.on("click", on_inspector_close);
+		gui_editor.btn_inpector_ok.on("click", gui_editor.on_inspector_commit);
+		gui_editor.btn_inpector_discard.on("click", gui_editor.on_inspector_close);
 		},
 	on_inspector_commit:function(){
+		console.log("on_inspector_commit");
+		steps[gui_editor.edit_step] = gui_editor.input_inpector_checktext.val();
 		gui_editor.on_inspector_close();
 		},
 	on_inspector_close:function(){
+		console.log("on_inspector_close");
 		gui_editor.open_page(gui_editor.editor);
 		},
 	update:function(){
@@ -236,7 +240,7 @@ gui_editor = {
 			element.on("click", {i:i}, function(evt){
 				gui_editor.end_edit();
 				gui_editor.edit_step = evt.data.i;
-				gui_editor.open_page(gui_editor.inspector_view);
+				gui_editor.open_inspector();
 				gui_editor.update();
 				});
 			gui_editor.lst_edit_checklist_items.append(element);
