@@ -104,7 +104,7 @@ gui_editor = {
 		//gui_editor.footer = $("#div-footer");
 		gui_editor.editor = $("#page-editor").page();
 		gui_editor.checklist_view = $("#page-editor-checklist").page();
-		gui_editor.step_view = $("#page-editor-step-inspector").page();
+		gui_editor.inspector_view = $("#page-editor-step-inspector").page();
 		gui_editor.footer = $('[data-role="footer"]', gui_editor.editor);
 		gui_editor.header = $('[data-role="header"]', gui_editor.editor);
 		gui_editor.titlebar = $("#div-titlebar-editor");
@@ -122,6 +122,10 @@ gui_editor = {
 
 		gui_editor.btn_back_to_checklists = $(".btn-back", gui_editor.checklist_view);
 		gui_editor.btn_exit_editor = $(".btn-back", gui_editor.editor);
+
+		gui_editor.input_inpector_checktext = $("#input-inspector-checktext");
+		gui_editor.btn_inpector_ok = $("#btn-inspector-ok");
+		gui_editor.btn_inpector_discard = $("#btn-inspector-discard");
 
 		// Hook into other stuff
 		gui_editor.raw_checklist = raw_checklist || gui_editor.empty_checklist;
@@ -142,15 +146,12 @@ gui_editor = {
 		console.log("Selected "+name);
 		gui_editor.open_page(gui_editor.checklist_view);
 	 	},
-	on_select_step:function(number){
-		gui_editor.open_page(gui_editor.checklist_view);
-		},
 	end_edit:function(){
 		// Terminates current text editing process.
 		// NOTE: edit_step and current_checklist must be consistent!
 		var inp = gui_editor._inputfield;
 		if (gui_editor.edit_step != null){
-			gui_editor._cl().steps[gui_editor.edit_step] = inp.attr("value");
+			//gui_editor._cl().steps[gui_editor.edit_step] = inp.attr("value");
 			gui_editor.edit_step = null;
 			gui_editor._inputfield = null;
 			gui_editor.update();
@@ -168,6 +169,19 @@ gui_editor = {
 	on_exit_btn:function(){
 		gui_editor.current_checklist = null;
 		gui_editor.end_edit();
+		gui_editor.open_page(gui_editor.editor);
+		},
+	open_inspector:function(){
+		var steps = gui_editor._cl().steps;
+		gui_editor.input_inpector_checktext = steps[gui_editor.edit_step];
+		gui_editor.open_page(gui_editor.inspector_view);
+		gui_editor.btn_inpector_ok.on("click", on_inspector_commit);
+		gui_editor.btn_inpector_discard.on("click", on_inspector_close);
+		},
+	on_inspector_commit:function(){
+		gui_editor.on_inspector_close();
+		},
+	on_inspector_close:function(){
 		gui_editor.open_page(gui_editor.editor);
 		},
 	update:function(){
@@ -201,7 +215,7 @@ gui_editor = {
 		var active = null;
 		for (var i in steps){
 			var element = $('<li class="ui-btn ui-btn-icon-right"></li>');
-			if (gui_editor.edit_step==i){
+/*			if (gui_editor.edit_step==i){
 				var inp = $('<input type="text">').attr("value", steps[i]);
 				inp.on( "focusout", gui_editor.end_edit);
 				inp.on( "keypress", function(evt){
@@ -210,18 +224,19 @@ gui_editor = {
 					}
 					});
 				gui_editor._inputfield = inp;
-
 				window.setTimeout(function(){
 					inp.focus();
 					console.log("Focus!");
 				}, 500);
 				element.append(inp);
 			} else
+*/
 				element.text(steps[i]);
-			// Edit text on dblclick
-			element.on("dblclick", {i:i}, function(evt){
+
+			element.on("click", {i:i}, function(evt){
 				gui_editor.end_edit();
 				gui_editor.edit_step = evt.data.i;
+				gui_editor.open_page(gui_editor.inspector_view);
 				gui_editor.update();
 				});
 			gui_editor.lst_edit_checklist_items.append(element);
