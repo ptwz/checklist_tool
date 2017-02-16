@@ -173,20 +173,19 @@ gui_editor = {
 		},
 	open_inspector:function(){
 		var steps = gui_editor._cl().steps;
-		console.log("open_inspector");
 		gui_editor.input_inpector_checktext.val(steps[gui_editor.edit_step]);
 		gui_editor.open_page(gui_editor.inspector_view);
 		gui_editor.btn_inpector_ok.on("click", gui_editor.on_inspector_commit);
 		gui_editor.btn_inpector_discard.on("click", gui_editor.on_inspector_close);
 		},
 	on_inspector_commit:function(){
-		console.log("on_inspector_commit");
+		var steps = gui_editor._cl().steps;
 		steps[gui_editor.edit_step] = gui_editor.input_inpector_checktext.val();
+		gui_editor.update();
 		gui_editor.on_inspector_close();
 		},
 	on_inspector_close:function(){
-		console.log("on_inspector_close");
-		gui_editor.open_page(gui_editor.editor);
+		gui_editor.open_page(gui_editor.checklist_view);
 		},
 	update:function(){
 	 	// Fix checklist viewer height
