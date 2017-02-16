@@ -173,6 +173,7 @@ gui_editor = {
 		},
 	open_inspector:function(){
 		var steps = gui_editor._cl().steps;
+
 		gui_editor.input_inpector_checktext.val(steps[gui_editor.edit_step]);
 		gui_editor.open_page(gui_editor.inspector_view);
 		gui_editor.btn_inpector_ok.on("click", gui_editor.on_inspector_commit);
@@ -196,7 +197,7 @@ gui_editor = {
 		gui_editor.lst_all_checklists.empty();
 		var checklists = gui_editor.raw_checklist.checklists;
 		for (var i in checklists){
-			var element = $('<li class="ui-btn ui-btn-icon-right"></li>');
+			var element = $('<a></a>');
 			element.text(i);
 			element.on("click", {'name':i}, function(evt){
 				gui_editor.on_select_checklist(evt.data.name);
@@ -204,7 +205,8 @@ gui_editor = {
 			console.log(i+"?="+gui_editor.current_checklist);
 			if (i == gui_editor.current_checklist)
 				element.addClass("down");
-			gui_editor.lst_all_checklists.append(element);
+			var wrapper = $("<li></li>").append(element);
+			gui_editor.lst_all_checklists.append(wrapper);
 		}
 		gui_editor.lst_all_checklists.listview("refresh");
 
@@ -217,7 +219,7 @@ gui_editor = {
 
 		var active = null;
 		for (var i in steps){
-			var element = $('<li class="ui-btn ui-btn-icon-right"></li>');
+			var element = $('<a></a>').button();
 /*			if (gui_editor.edit_step==i){
 				var inp = $('<input type="text">').attr("value", steps[i]);
 				inp.on( "focusout", gui_editor.end_edit);
@@ -242,7 +244,8 @@ gui_editor = {
 				gui_editor.open_inspector();
 				gui_editor.update();
 				});
-			gui_editor.lst_edit_checklist_items.append(element);
+			var wrapper=$("<li></li>").append(element);
+			gui_editor.lst_edit_checklist_items.append(wrapper);
 			console.log(steps[i]);
 			}
 		gui_editor.lst_edit_checklist_items
