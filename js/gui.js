@@ -103,16 +103,22 @@ gui_editor = {
 		//gui_editor.titlebar = $("#titlebar");
 		//gui_editor.footer = $("#div-footer
 		gui_editor.editor = $("#page-editor").page();
-		gui_editor.checklist_view = $("#page-editor-checklist").page();
-		gui_editor.inspector_view = $("#page-editor-step-inspector").page();
 		gui_editor.footer = $('[data-role="footer"]', gui_editor.editor);
 		gui_editor.header = $('[data-role="header"]', gui_editor.editor);
 		gui_editor.titlebar = $("#div-titlebar-editor");
-
 		gui_editor.btn_back = $('[data-role="header"]', gui_editor.editor);
-
 		gui_editor.lst_edit_checklist_items = $("#lst-edit-checklist-items");
 		gui_editor.lst_edit_checklist_items.listview();
+
+		gui_editor.checklist_view = $("#page-editor-checklist").page();
+		gui_editor.checklist_view_title = $("#page-editor-checklist .header-text");
+		gui_editor.input_checklist_name = $("#input-listname");
+
+		gui_editor.inspector_view = $("#page-editor-step-inspector").page();
+		gui_editor.inspector_view_title = $("#page-editor-step-inspector .header-text");
+		gui_editor.input_inpector_checktext = $("#input-inspector-checktext");
+
+
 
 		gui_editor.lst_nexts = $("#lst-edit-checklists-nexts");
 		gui_editor.lst_nexts.listview();
@@ -123,9 +129,9 @@ gui_editor = {
 		gui_editor.btn_back_to_checklists = $(".btn-back", gui_editor.checklist_view);
 		gui_editor.btn_exit_editor = $(".btn-back", gui_editor.editor);
 
-		gui_editor.input_inpector_checktext = $("#input-inspector-checktext");
 		gui_editor.btn_inpector_ok = $("#btn-inspector-ok");
-		gui_editor.btn_inpector_discard = $("#btn-inspector-discard");
+		gui_editor.btn_inpector_discard = $("#page-editor-step-inspector .btn-back");
+		gui_editor.inspector_view_title = $("#page-editor-step-inspector .header-text");
 
 		// Hook into other stuff
 		gui_editor.raw_checklist = raw_checklist || gui_editor.empty_checklist;
@@ -144,6 +150,7 @@ gui_editor = {
 	 	gui_editor.current_checklist = name;
 		gui_editor.update();
 		console.log("Selected "+name);
+		gui_editor.checklist_view_title.text(name);
 		gui_editor.open_page(gui_editor.checklist_view);
 	 	},
 	end_edit:function(){

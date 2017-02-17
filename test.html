@@ -22,7 +22,7 @@
    <h1 class="header-text">Titlebar</h1>
     <button class="ui-btn btn-back" data-inline="true" data-icon="ui-icon-arrow-l">
      <span class="ui-icon ui-icon-arrow-l ui-icon-shadow"></span>
-     Hallo
+     &lt;&lt;
     </button>
   </div>
   <div data-role="footer" data-position="fixed">
@@ -31,29 +31,49 @@
  <!-- EDITOR CHECKLIST VIEW -->
  <div data-role="page" id="page-editor-checklist">
    <div id="div-checklist-edior">
-    <input id="input-listname"></input>
-    <ul id="lst-edit-checklist-nexts" data-role="listview" >
-    </ul>
-    <ul id="lst-edit-checklist-items" data-role="listview" >
-    </ul>
-   </ul>
-  <div data-role="header" data-position="fixed">
-   <h1 class="header-text">Titlebar</h1>
-    <button class="ui-btn btn-back" data-inline="true" data-icon="ui-icon-arrow-l">
-     <span class="ui-icon ui-icon-arrow-l ui-icon-shadow"></span>
-     &lt;&lt;
-    </button>
-  </div>
+    <div data-role="tabs">
+     <div data-role="navbar">
+      <ul>
+       <li><a href="#edit-general" class="ui-btn-active">General</a></li>
+       <li><a href="#edit-checks">Checks</a></li>
+       <li><a href="#edit-nexts">Nexts</a></li>
+      </ul>
+     </div>
+     <div id="edit-general">
+      <input id="input-listname"></input>
+     </div>
+     <div id="edit-nexts">
+      <ul id="lst-edit-checklist-nexts" data-role="listview" >
+      </ul>
+     </div>
+     <div id="edit-checks">
+      <ul id="lst-edit-checklist-items" data-role="listview" >
+      </ul>
+     </div>
+   <div data-role="header" data-position="fixed">
+    <h1 class="header-text">Titlebar</h1>
+     <button class="ui-btn btn-back" data-inline="true" data-icon="ui-icon-arrow-l">
+      <span class="ui-icon ui-icon-arrow-l ui-icon-shadow"></span>
+      &lt;&lt;
+     </button>
+   </div>
+  </div> <!-- tabs -->
   <div data-role="footer" data-position="fixed">
   </div>
  </div>
  </div>
  <!-- EDITOR CHECK DETAIL VIEW -->
  <div data-role="page" id="page-editor-step-inspector">
+  <div data-role="header" data-position="fixed">
+   <h1 class="header-text">Titlebar</h1>
+    <button class="ui-btn btn-back" data-inline="true" data-icon="ui-icon-arrow-l">
+     <span class="ui-icon ui-icon-arrow-l ui-icon-shadow"></span>
+     &lt;&lt;
+    </button>
+    <a id="btn-inspector-ok" data-role="button" class="btn-apply" data-inline="true" data-icon="check">&nbsp;</a>
+  </div>
    <div id="div-inspector">
     <input id="input-inspector-checktext"  type="text" placeholder="Check text"></input>
-    <a id="btn-inspector-ok" data-role="button" class="btn-apply" data-inline="true" data-icon="check"></a>
-    <a id="btn-inspector-discard" data-role="button" class="btn-back"  data-icon="back" data-inline="true"></a>
    </div>
  </div>
 
