@@ -15,6 +15,8 @@ gui_workbook = {
 		checklist.update_gui = gui_workbook.update;
 		// Show first frame
 		gui_workbook.update();
+		// Trigger view updates
+		$(document).trigger("update-checklist");
 		},
 	update:function(){
 		// Title bar creation
@@ -76,11 +78,37 @@ gui_workbook = {
 			btn.button("refresh");
 		}
 	},
+	open_checklist:function(name){
+		gui_workbook.checklist.set_current(name);
+		window.location.hash="#page-workbook";
+	},
 	on_click_checked:function(){
 		gui_workbook.checklist.finish_step();
 		},
 }
 
+gui_overview = {
+	init:function(element){
+		gui_overview.list = $("#all-lists").listview();
+		gui_overview.header = $("[data-role='header']", element);
+		$(document).on("update-checklist", gui_overview.update());
+		gui_overview.update();
+		},
+	update:function(){
+		gui_overview.list.empty();
+		var cl = gui_workbook.checklist.get_all();
+		for (var i in cl){
+			var e = $("<li></li>");
+			var label = $("<a></a>").text(cl[i]);
+			var edit = $('<a data-icon="edit"></a>');
+			edit.on('click', {l:cl[i]}, function(evt){ gui_editor.open_checklist(evt.data.l);} );
+			label.on('click', {l:cl[i]}, function(evt){ gui_workbook.open_checklist(evt.data.l);} );
+			e.append(label).append(edit);
+			gui_overview.list.append(e);
+			}
+		gui_overview.list.listview("refresh");
+		}
+	}
 
 gui_editor = {
 	empty_checklist:{
@@ -106,7 +134,7 @@ gui_editor = {
 		gui_editor.footer = $('[data-role="footer"]', gui_editor.editor);
 		gui_editor.header = $('[data-role="header"]', gui_editor.editor);
 		gui_editor.titlebar = $("#div-titlebar-editor");
-		gui_editor.btn_back = $('[data-role="header"]', gui_editor.editor);
+		gui_editor.btn_back = $('.btn-back', gui_editor.editor);
 		gui_editor.lst_edit_checklist_items = $("#lst-edit-checklist-items");
 		gui_editor.lst_edit_checklist_items.listview();
 
@@ -141,10 +169,15 @@ gui_editor = {
 		gui_editor.footer.empty();
 		gui_editor.btn_exit_editor.on("click", gui_editor.on_exit_btn);
 		gui_editor.btn_back_to_checklists.on("click", gui_editor.on_back_to_checklists);
+		gui_editor.btn_back.on("click", function(){window.location.hash="page-all-lists"} );
 
 		//gui_editor.checklist.set_current("Startup");
 		//
 		},
+	open_checklist:function(name){
+		// Opens a checklist in edit mode
+		gui_editor.on_select_checklist(name);
+	},
 	on_select_checklist:function(name){
 		gui_editor.end_edit();
 	 	gui_editor.current_checklist = name;
@@ -256,7 +289,7 @@ gui_editor = {
 			console.log(steps[i]);
 			}
 		gui_editor.lst_edit_checklist_items
-			.sortable()
+			.sortable({"helper":"clone"})
 			.disableSelection()
 			.bind( "sortstop", function(event, ui) {
 			      var lst = gui_editor.lst_edit_checklist_items;

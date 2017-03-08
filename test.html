@@ -77,6 +77,22 @@
    </div>
  </div>
 
+ <!-- CHECK SELECTION (FLIGHT MODE/EDIT BASE)-->
+ <div data-role="page" id="page-all-lists">
+  <div data-role="header" data-position="fixed">
+   <h1>Checklists</h1>
+    <a href="#page-workbook" class="ui-btn ui-icon ui-icon-arrow-l ui-icon-shadow" data-inline="true" data-icon="arrow-l">
+     &nbsp;
+    </a>
+  </div>
+
+  <ul data-role="listview" id="all-lists">
+  </ul>
+
+  <div data-role="footer" data-position="fixed">
+  </div>
+ </div>
+
  <!-- CHECK WORKBOOK (FLIGHT MODE)-->
  <div data-role="page" id="page-workbook">
   <!-- Main "workspace" -->
@@ -89,10 +105,9 @@
   <!-- Misc stuff -->
   <div data-role="header" data-position="fixed">
    <h1 id="titlebar">Titlebar</h1>
-    <button id="btn-back" class="ui-btn" data-inline="true" data-icon="ui-icon-arrow-l">
-     <span class="ui-icon ui-icon-arrow-l ui-icon-shadow"></span>
-     Hallo
-    </button>
+    <a href="#page-all-lists" class="ui-btn ui-icon-arrow-l ui-icon-shadow" data-inline="true" data-icon="ui-icon-arrow-l">
+     &lt;&lt;
+    </a>
   </div>
   <div id="div-footer" data-role="footer" data-position="fixed">
  </div>
@@ -139,6 +154,8 @@ x={
  	checklist.init(x);
 	gui_workbook.init(checklist);
 	gui_editor.init(x);
+	gui_overview.init(x);
+	window.location.hash="page-all-lists";
   });
  </script>
 </body>
