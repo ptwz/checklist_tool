@@ -146,9 +146,7 @@ gui_editor = {
 		gui_editor.inspector_view_title = $("#page-editor-step-inspector .header-text");
 		gui_editor.input_inpector_checktext = $("#input-inspector-checktext");
 
-
-
-		gui_editor.lst_nexts = $("#lst-edit-checklists-nexts");
+		gui_editor.lst_nexts = $("#lst-edit-checklist-nexts");
 		gui_editor.lst_nexts.listview();
 
 		gui_editor.lst_all_checklists = $("#lst-all-checklists");
@@ -288,6 +286,15 @@ gui_editor = {
 			gui_editor.lst_edit_checklist_items.append(wrapper);
 			console.log(steps[i]);
 			}
+		var edit_link = $('<a data-icon="plus">&nbsp;</a>')
+			.on("click", function(){
+				gui_editor._cl().steps.push(" ; ");
+				gui_editor.update();
+				} );
+		var wrapper=$('<li data-icon="plus" data-icon></li>')
+			.append(edit_link);
+		gui_editor.lst_edit_checklist_items.append(wrapper);
+
 		gui_editor.lst_edit_checklist_items
 			.sortable({"helper":"clone"})
 			.disableSelection()
@@ -303,5 +310,43 @@ gui_editor = {
 			      gui_editor._cl().steps = new_steps;
 			  });
 		gui_editor.lst_edit_checklist_items.listview("refresh");
+
+		gui_editor.lst_nexts.empty();
+		var cl = gui_editor._cl();
+		if (cl===undefined)
+			return;
+		var nexts = cl.next;
+		for (var i in checklists){
+			var element = $('<a></a>');
+			element.text(i);
+			if ( nexts.indexOf(i) >= 0 ) {
+				var icon = "check";
+				// Info: The handler will get passed the
+				// 	 current "i" (key) via the event object.
+				var handler = function(evt){
+						var item = evt.data.i;
+						nexts.filter( function(x) { return item != x } );
+						gui_editor.update();
+					};
+			} else
+			{
+				icon = "none";
+				// Info: The handler will get passed the
+				// 	 current "i" (key) via the event object.
+				var handler = function(evt){
+						var item = evt.data.i;
+						nexts.push(  item );
+						gui_editor.update();
+					};
+			}
+			var btn = $('<a></a>')
+				.attr("data-icon", icon)
+				.on("click", {i:i},  handler);
+			var wrapper = $("<li></li>")
+				.append(element)
+				.append(btn);
+			gui_editor.lst_nexts.append(wrapper);
+		}
+		gui_editor.lst_nexts.listview("refresh");
 		}
 	};
